@@ -47,7 +47,8 @@ const createNote = async(req, res) => {
 const updateNote = async(req, res) => {
   try {
     const { owner, id } = req.params;
-    
+    const { title, contain } = req.body;
+
     if(!owner || !id) {
       return res.status(400).json({ msg: "Owner or ID is empty!" })
     }
@@ -60,12 +61,12 @@ const updateNote = async(req, res) => {
     });
 
     if(!existingData) {
-      return res.status(404).json({ msg: "Data not found!" });
+      return res.status(400).json({ msg: "Data not found!" });
     }
 
     const newData = {
-      title: req.body.title || existingData.title,
-      contain: req.body.contain || existingData.contain
+      title: title || existingData.title,
+      contain: contain || existingData.contain
     }
 
     await Notes.update(newData, {
