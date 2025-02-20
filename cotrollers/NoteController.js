@@ -24,7 +24,7 @@ const getByOwner = async(req, res) => {
 
     // error message kalau owner tidak ditemukan
     if(response.length === 0) {
-      res.status(404).json({ msg: "User not found!" });
+      return res.status(404).json({ msg: "User not found!" });
     } else{
       res.status(200).json(response);
     }
@@ -57,7 +57,11 @@ const updateNote = async(req, res) => {
         owner: owner,
         id: id
       }
-    }) ?? res.status(404).json({ msg: "Data not found" });
+    });
+
+    if(!existingData) {
+      return res.status(404).json({ msg: "Data not found!" });
+    }
 
     const newData = {
       title: req.body.title || existingData.title,
@@ -77,4 +81,25 @@ const updateNote = async(req, res) => {
   }
 }
 
-export { getNotes, getByOwner, createNote, updateNote };
+const deleteNote = async(req, res) => {
+  try {
+    const { owner, id } = req.params ?? res.status(400).json({ msg: "Owner or ID is empty!" });
+
+    const del = await Notes.destroy({
+      where: {
+        owner: owner,
+        id: id
+      }
+    })
+    
+    if(!del) {
+      return res.status(400).json({ msg: "Owner or ID not found!" }) 
+    }
+    res.status(200).json({ msg: "Successfully deleted" });
+    
+  } catch(error) {
+
+  }
+}
+
+export { getNotes, getByOwner, createNote, updateNote, deleteNote };
