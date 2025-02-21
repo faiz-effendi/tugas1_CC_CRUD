@@ -3,10 +3,10 @@ import { getNotes, getByOwner, createNote, updateNote, deleteNote } from '../cot
 
 const router = express.Router();
 
-router.get("/getAllNotes", getNotes);
-router.get("/getNotesByOwner/:owner", getByOwner);
-router.post("/createNote", createNote);
-router.put("/updateNote/:owner/:id", updateNote);
-router.delete("/deleteNote/:owner/:id", deleteNote);
+router.get("/notes", getNotes);
+router.get("/notes/:owner", getByOwner);
+router.post("/notes", createNote);
+router.patch("/notes/:owner/:id", updateNote);
+router.delete("/notes/:owner/:id", deleteNote);
 
 export default router;
